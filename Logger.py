@@ -4,10 +4,10 @@ from typing import Type, Optional
 
 def logged(exception: Type[Exception], mode: str = "console", logfile: Optional[str] = "Logged_Messages.txt"):
     """
-    Параметризований декоратор.
-    - exception: виняток, який треба ловити і логувати
-    - mode: "console" або "file"
-    - logfile: шлях до текстового лог-файлу (тільки для режиму "file")
+   Parameterized decorator.
+- `exception`: the exception to catch and log
+- `mode`: "console" or "file"
+- `logfile`: path to the text log file (only for the "file" mode)
     """
     if mode not in ("console", "file"):
         raise ValueError("mode must be 'console' or 'file'")

@@ -4,21 +4,22 @@ from typing import List, Dict, Iterable, Optional
 from Logger import logged
 
 class FileNotFound(Exception):
-    """Файл не знайдено."""
+    """File not found"""
     pass
 
 class FileCorrupted(Exception):
-    """Файл пошкоджено або недоступний для читання/запису."""
+    """The file is corrupted or inaccessible for reading/writing"""
     pass
 
 class CSVHandler:
     """
-    Клас для роботи з CSV-файлом.
-    - Перевіряє існування файлу у конструкторі.
-    - read(): читає всі рядки як список словників.
-    - write(rows): перезаписує файл повністю.
-    - append_rows(rows): дописує багато рядків.
-    - append_row(row): дописує один рядок.
+    Class for working with a CSV file
+* Checks for file existence in the constructor
+* `read()`: reads all rows as a list of dictionaries
+* `write(rows)`: overwrites the file completely
+* `append_rows(rows)`: appends multiple rows
+* `append_row(row)`: appends a single row
+
     """
 
     @logged(exception=FileNotFound, mode="file", logfile="Logged_Messages.txt")
@@ -35,7 +36,7 @@ class CSVHandler:
             raise FileNotFound(f"Path '{self.file_path}' is not a file")
 
     def _read_all(self) -> List[Dict[str, str]]:
-        """Внутрішній метод: читає файл та повертає список словників."""
+        """internal method: reads the file and returns a list of dictionaries"""
         try:
             with open(self.file_path, "r", encoding=self.encoding, newline="") as f:
                
@@ -55,7 +56,7 @@ class CSVHandler:
             raise FileCorrupted(f"Cannot read CSV: {e}")
 
     def _write_all(self, rows: List[Dict[str, str]], headers: Optional[List[str]] = None) -> None:
-        """Внутрішній метод: повністю перезаписує файл."""
+        """Internal method: completely overwrites the file"""
         try:
            
             if headers is None:
@@ -73,7 +74,7 @@ class CSVHandler:
             raise FileCorrupted(f"Cannot write CSV: {e}")
 
     def _append_many(self, rows: Iterable[Dict[str, str]]) -> None:
-        """Внутрішній метод: дописує кілька рядків, узгоджуючи їх із заголовком."""
+        """Internal method: appends multiple rows, aligning them with the header"""
         try:
             
             with open(self.file_path, "r", encoding=self.encoding, newline="") as f:
@@ -95,21 +96,21 @@ class CSVHandler:
 
     @logged(exception=FileCorrupted, mode="file", logfile="Logged_Messages.txt")
     def read(self) -> List[Dict[str, str]]:
-        """Публічний метод читання CSV як список словників."""
+        """Public method to read CSV as a list of dictionaries"""
         return self._read_all()
 
     @logged(exception=FileCorrupted, mode="file", logfile="Logged_Messages.txt")
     def write(self, rows: List[Dict[str, str]], headers: Optional[List[str]] = None) -> None:
-        """Публічний метод перезапису CSV (повністю)."""
+        """Public method to overwrite the CSV (completely)"""
         self._write_all(rows, headers=headers)
 
     @logged(exception=FileCorrupted, mode="file", logfile="Logged_Messages.txt")
     def append_rows(self, rows: Iterable[Dict[str, str]]) -> None:
-        """Публічний метод дописування багатьох рядків у CSV."""
+        """Public method to append multiple rows to the CSV"""
         self._append_many(rows)
 
     @logged(exception=FileCorrupted, mode="file", logfile="Logged_Messages.txt")
     def append_row(self, row: Dict[str, str]) -> None:
-        """Публічний метод дописування одного рядка у CSV."""
+        """Public method to append a single row to the CSV"""
         self._append_many([row])
 
